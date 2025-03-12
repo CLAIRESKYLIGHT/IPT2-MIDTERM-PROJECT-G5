@@ -109,18 +109,69 @@ session_start();
                 <!-- Edit Button -->
                 <button class="btn btn-success btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#editInfo<?php echo $row['id']; ?>">Update</button>
 
-                <!-- Edit Modal -->
-        <div class="modal fade" id="editInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="editInfoLabel" aria-hidden="true">
-        <div class="modal-dialog">
+<!-- Edit Modal -->
+<style>
+    /* Modal Content Styling */
+    #editInfo<?php echo $row['id']; ?> .modal-content {
+        background: #f8f9fa;
+        border-radius: 12px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Header Styling */
+    #editInfo<?php echo $row['id']; ?> .modal-header {
+        background-color: #007bff;
+        color: white;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    /* Close Button */
+    #editInfo<?php echo $row['id']; ?> .btn-close {
+        filter: invert(1);
+    }
+
+    /* Form Labels */
+    #editInfo<?php echo $row['id']; ?> .form-label {
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    /* Input Fields */
+    #editInfo<?php echo $row['id']; ?> .form-control {
+        border-radius: 8px;
+    }
+
+    /* Select Dropdown */
+    #editInfo<?php echo $row['id']; ?> .form-select {
+        border-radius: 8px;
+    }
+
+    /* Submit Button */
+    #editInfo<?php echo $row['id']; ?> .btn-primary {
+        width: 100%;
+        background: #007bff;
+        border: none;
+        transition: 0.3s;
+        font-weight: bold;
+    }
+
+    #editInfo<?php echo $row['id']; ?> .btn-primary:hover {
+        background: #0056b3;
+    }
+</style>
+
+<div class="modal fade" id="editInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="editInfoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title">Edit Product</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="database/update.php" method="POST">
-                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                    
+                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+
                     <!-- Product Name -->
                     <div class="mb-3">
                         <label class="form-label">Product Name</label>
@@ -132,9 +183,9 @@ session_start();
                         <label class="form-label">Category</label>
                         <select class="form-select" name="category" required>
                             <option value="Electronics" <?php if ($row['category'] == 'Electronics') echo 'selected'; ?>>Electronics</option>
-                            <option value="Clothing" <?php if ($row['category'] == 'Clothing') echo 'selected'; ?>>Food</option>
+                            <option value="Food" <?php if ($row['category'] == 'Food') echo 'selected'; ?>>Food</option>
                             <option value="Home" <?php if ($row['category'] == 'Home') echo 'selected'; ?>>Home</option>
-                            <option value="Home" <?php if ($row['category'] == 'Home') echo 'selected'; ?>>Hygene</option>
+                            <option value="Hygiene" <?php if ($row['category'] == 'Hygiene') echo 'selected'; ?>>Hygiene</option>
                         </select>
                     </div>
 
@@ -150,7 +201,7 @@ session_start();
                         <input type="number" class="form-control" name="stock_quantity" value="<?php echo $row['stock_quantity']; ?>" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary">Update Product</button>
                 </form>
             </div>
         </div>
@@ -158,10 +209,52 @@ session_start();
 </div>
 
 
+
 <!-- View Button -->
     <button class="btn btn-primary btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#viewInfo<?php echo $row['id']; ?>">View</button>
 
 <!-- View Modal -->
+<style>
+    /* Modal Background */
+    #viewInfo<?php echo $row['id']; ?> .modal-content {
+        background: #f8f9fa;
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Header Styling */
+    #viewInfo<?php echo $row['id']; ?> .modal-header {
+        background-color:rgb(72, 132, 143);
+        color: white;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    /* Close Button */
+    #viewInfo<?php echo $row['id']; ?> .btn-close {
+        filter: invert(1);
+    }
+
+    /* Modal Body */
+    #viewInfo<?php echo $row['id']; ?> .modal-body {
+        padding: 20px;
+        font-size: 16px;
+    }
+
+    /* Product Details Styling */
+    #viewInfo<?php echo $row['id']; ?> .modal-body p {
+        background: #ffffff;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+
+    #viewInfo<?php echo $row['id']; ?> strong {
+        color: #333;
+    }
+</style>
+
     <div class="modal fade" id="viewInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="viewInfoLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -183,6 +276,70 @@ session_start();
     <button class="btn btn-danger btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#deleteInfo<?php echo $row['id']; ?>">Delete</button>
 
 <!-- Delete Modal -->
+<style>
+    /* Modal Background */
+    #deleteInfo<?php echo $row['id']; ?> .modal-content {
+        background: #fff3f3;
+        border-radius: 12px;
+        box-shadow: 0px 4px 12px rgba(255, 0, 0, 0.3);
+        border: 2px solid #dc3545;
+    }
+
+    /* Header Styling */
+    #deleteInfo<?php echo $row['id']; ?> .modal-header {
+        background-color: #dc3545;
+        color: white;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    /* Close Button */
+    #deleteInfo<?php echo $row['id']; ?> .btn-close {
+        filter: invert(1);
+    }
+
+    /* Modal Body */
+    #deleteInfo<?php echo $row['id']; ?> .modal-body {
+        font-size: 18px;
+        text-align: center;
+        font-weight: bold;
+        color: #a30000;
+    }
+
+    /* Strong Text */
+    #deleteInfo<?php echo $row['id']; ?> strong {
+        color: #721c24;
+    }
+
+    /* Footer Buttons */
+    #deleteInfo<?php echo $row['id']; ?> .modal-footer {
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Delete Button */
+    #deleteInfo<?php echo $row['id']; ?> .btn-danger {
+        background: #c82333;
+        border-color: #bd2130;
+        transition: 0.3s;
+    }
+
+    #deleteInfo<?php echo $row['id']; ?> .btn-danger:hover {
+        background: #a71d2a;
+        border-color: #921224;
+    }
+
+    /* Cancel Button */
+    #deleteInfo<?php echo $row['id']; ?> .btn-secondary {
+        background: #6c757d;
+        transition: 0.3s;
+    }
+
+    #deleteInfo<?php echo $row['id']; ?> .btn-secondary:hover {
+        background: #5a6268;
+    }
+</style>
+
     <div class="modal fade" id="deleteInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="deleteInfoLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
