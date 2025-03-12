@@ -23,29 +23,36 @@ session_start();
 <main id="main" class="main">
 <!--ALERT-->
 <?php if ($status == "created"): ?>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      <strong>Product added successfully!</strong>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center p-3 shadow-sm rounded" role="alert" style="border-left: 5px solid #28a745;">
+    <i class="bi bi-check-circle-fill me-2 text-success fs-4"></i>
+    <strong>Product added successfully!</strong>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+
 <?php elseif ($status == "updated"): ?>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      <strong>Product updated successfully!</strong>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center p-3 shadow-sm rounded" role="alert" style="border-left: 5px solid #28a745;">
+    <i class="bi bi-pencil-square me-2 text-success fs-4"></i>
+    <strong>Product updated successfully!</strong>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+
 <?php elseif ($status == "error"): ?>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
       <strong>There was an error adding the product!</strong>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <?php elseif ($status == "deleted"): ?>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      <strong>Product deleted successfully!</strong>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center p-3 shadow-sm rounded" 
+     role="alert" style="border-left: 5px solid #dc3545;">
+    <i class="bi bi-trash3-fill me-2 text-danger fs-4"></i>
+    <strong>Product deleted successfully!</strong>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+
 <?php endif; ?>
 
 <!--END ALERT-->
-
+<!--PAGE TITLE-->
     <div class="pagetitle">
       <h1>Product Management System</h1>
       <nav>
@@ -100,19 +107,19 @@ session_start();
             <td><?php echo $row['stock_quantity']; ?></td>
             <td class="d-flex justify-content-center">
                 <!-- Edit Button -->
-                <button class="btn btn-success btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#editInfo<?php echo $row['id']; ?>">Edit</button>
+                <button class="btn btn-success btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#editInfo<?php echo $row['id']; ?>">Update</button>
 
                 <!-- Edit Modal -->
         <div class="modal fade" id="editInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="editInfoLabel" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 class="modal-title">Edit Product</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="database/update.php" method="POST">
-                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                     
                     <!-- Product Name -->
                     <div class="mb-3">
@@ -120,7 +127,7 @@ session_start();
                         <input type="text" class="form-control" name="product_name" value="<?php echo $row['product_name']; ?>" required>
                     </div>
 
-                    <!-- Category (Added the missing category dropdown) -->
+                    <!-- Category -->
                     <div class="mb-3">
                         <label class="form-label">Category</label>
                         <select class="form-select" name="category" required>
@@ -137,7 +144,7 @@ session_start();
                         <input type="number" class="form-control" name="price" value="<?php echo $row['price']; ?>" required>
                     </div>
 
-                    <!-- Stock Quantity (if missing) -->
+                    <!-- Stock Quantity -->
                     <div class="mb-3">
                         <label class="form-label">Stock Quantity</label>
                         <input type="number" class="form-control" name="stock_quantity" value="<?php echo $row['stock_quantity']; ?>" required>
@@ -151,60 +158,59 @@ session_start();
 </div>
 
 
-                <!-- View Button -->
-                <button class="btn btn-primary btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#viewInfo<?php echo $row['id']; ?>">View</button>
+<!-- View Button -->
+    <button class="btn btn-primary btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#viewInfo<?php echo $row['id']; ?>">View</button>
 
-                <!-- View Modal -->
-                <div class="modal fade" id="viewInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="viewInfoLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Product Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p><strong>Name:</strong> <?php echo $row['product_name']; ?></p>
-                                <p><strong>Category:</strong> <?php echo $row['category']; ?></p>
-                                <p><strong>Price:</strong> <?php echo $row['price']; ?></p>
-                                <p><strong>Stock:</strong> <?php echo $row['stock_quantity']; ?></p>
-                            </div>
-                        </div>
+<!-- View Modal -->
+    <div class="modal fade" id="viewInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="viewInfoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Product Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Name:</strong> <?php echo $row['product_name']; ?></p>
+                    <p><strong>Category:</strong> <?php echo $row['category']; ?></p>
+                    <p><strong>Price:</strong> <?php echo $row['price']; ?></p>
+                    <p><strong>Stock:</strong> <?php echo $row['stock_quantity']; ?></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Delete Button -->
+    <button class="btn btn-danger btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#deleteInfo<?php echo $row['id']; ?>">Delete</button>
+
+<!-- Delete Modal -->
+    <div class="modal fade" id="deleteInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="deleteInfoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                     <div class="modal-body">Are you sure you want to delete <strong><?php echo $row['product_name']; ?></strong>?
+                </div>
+                    <div class="modal-footer">
+                        <form action="database/delete.php" method="GET">
+                            <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                        </form>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Delete Button -->
-                <button class="btn btn-danger btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#deleteInfo<?php echo $row['id']; ?>">Delete</button>
-
-                <!-- Delete Modal -->
-                <div class="modal fade" id="deleteInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="deleteInfoLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Confirm Delete</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to delete <strong><?php echo $row['product_name']; ?></strong>?
-                            </div>
-                            <div class="modal-footer">
-                                <form action="database/delete.php" method="GET">
-                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                                </form>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </td>
+        </td>
         </tr>
-        <?php endwhile; endif; ?>
-    </tbody>
+<?php endwhile; endif; ?>
+</tbody>
 </table>
 
-
-<!-- End Default Table Example -->
+<!-- End OF Table Modal and alert -->
+ 
             </div>
             <div class="mx-4">
               <nav aria-label="Page navigation example">
@@ -224,8 +230,60 @@ session_start();
         
       </div>
 
-      <!-- Modal -->
-      <div class="modal fade" id="addProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
+<!-- Modal -->
+<style>
+    /* Modal Background */
+    #addProduct .modal-content {
+        background: linear-gradient(135deg, #ffffff, #f8f9fa);
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Header Styling */
+    #addProduct .modal-header {
+        background-color: #007bff;
+        color: white;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    /* Close Button */
+    #addProduct .btn-close {
+        filter: invert(1);
+    }
+
+    /* Form Inputs */
+    #addProduct .form-control, 
+    #addProduct .form-select {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        padding: 10px;
+    }
+
+    /* Form Labels */
+    #addProduct .form-label {
+        font-weight: bold;
+        color: #495057;
+    }
+
+    /* Footer Buttons */
+    #addProduct .modal-footer {
+        border-top: none;
+    }
+
+    #addProduct .btn-primary {
+        background-color: #007bff;
+        border-radius: 8px;
+        padding: 8px 16px;
+    }
+
+    #addProduct .btn-secondary {
+        border-radius: 8px;
+        padding: 8px 16px;
+    }
+</style>
+
+    <div class="modal fade" id="addProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
