@@ -4,6 +4,8 @@ session_start();
   include('partials\sidebar.php');
   include('database\database.php');
   include('database\create.php');
+  include('database\update.php');
+  include('database\delete.php');
 
   $sql = "SELECT * FROM tblproduct";
 
@@ -45,7 +47,7 @@ session_start();
 <!--END ALERT-->
 
     <div class="pagetitle">
-      <h1>Employee Information Management System</h1>
+      <h1>Product Management System</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.php">Home</a></li>
@@ -101,30 +103,53 @@ session_start();
                 <button class="btn btn-success btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#editInfo<?php echo $row['id']; ?>">Edit</button>
 
                 <!-- Edit Modal -->
-                <div class="modal fade" id="editInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="editInfoLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Edit Product</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="database/update.php" method="POST">
-                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                    <div class="mb-3">
-                                        <label class="form-label">Product Name</label>
-                                        <input type="text" class="form-control" name="product_name" value="<?php echo $row['product_name']; ?>" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Price</label>
-                                        <input type="number" class="form-control" name="price" value="<?php echo $row['price']; ?>" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Update</button>
-                                </form>
-                            </div>
-                        </div>
+        <div class="modal fade" id="editInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="editInfoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="database/update.php" method="POST">
+                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                    
+                    <!-- Product Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Product Name</label>
+                        <input type="text" class="form-control" name="product_name" value="<?php echo $row['product_name']; ?>" required>
                     </div>
-                </div>
+
+                    <!-- Category (Added the missing category dropdown) -->
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" name="category" required>
+                            <option value="Electronics" <?php if ($row['category'] == 'Electronics') echo 'selected'; ?>>Electronics</option>
+                            <option value="Clothing" <?php if ($row['category'] == 'Clothing') echo 'selected'; ?>>Food</option>
+                            <option value="Home" <?php if ($row['category'] == 'Home') echo 'selected'; ?>>Home</option>
+                            <option value="Home" <?php if ($row['category'] == 'Home') echo 'selected'; ?>>Hygene</option>
+                        </select>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="mb-3">
+                        <label class="form-label">Price</label>
+                        <input type="number" class="form-control" name="price" value="<?php echo $row['price']; ?>" required>
+                    </div>
+
+                    <!-- Stock Quantity (if missing) -->
+                    <div class="mb-3">
+                        <label class="form-label">Stock Quantity</label>
+                        <input type="number" class="form-control" name="stock_quantity" value="<?php echo $row['stock_quantity']; ?>" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
                 <!-- View Button -->
                 <button class="btn btn-primary btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#viewInfo<?php echo $row['id']; ?>">View</button>
@@ -162,7 +187,7 @@ session_start();
                                 Are you sure you want to delete <strong><?php echo $row['product_name']; ?></strong>?
                             </div>
                             <div class="modal-footer">
-                                <form action="database/delete.php" method="POST">
+                                <form action="database/delete.php" method="GET">
                                     <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                                     <button type="submit" class="btn btn-danger">Yes, Delete</button>
                                 </form>
@@ -178,130 +203,8 @@ session_start();
     </tbody>
 </table>
 
-                <!--<tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                    <td class="d-flex justify-content-center">
-                      <button class="btn btn-success btn-sm mx-1">Edit</button>
-                      <button class="btn btn-primary btn-sm mx-1" title="View Employee Information" data-bs-toggle="modal" data-bs-target="#editInfo">View</button>
-                      <button class="btn btn-danger btn-sm mx-1">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Bridie Kessler</td>
-                    <td>Developer</td>
-                    <td>35</td>
-                    <td>2014-12-05</td>
-                    <td class="d-flex justify-content-center">
-                      <button class="btn btn-success btn-sm mx-1">Edit</button>
-                      <button class="btn btn-primary btn-sm mx-1" title="View Employee Information" data-bs-toggle="modal" data-bs-target="#editInfo">View</button>
-                      <button class="btn btn-danger btn-sm mx-1">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Ashleigh Langosh</td>
-                    <td>Finance</td>
-                    <td>45</td>
-                    <td>2011-08-12</td>
-                    <td class="d-flex justify-content-center">
-                      <button class="btn btn-success btn-sm mx-1">Edit</button>
-                      <button class="btn btn-primary btn-sm mx-1" title="View Employee Information" data-bs-toggle="modal" data-bs-target="#editInfo">View</button>
-                      <button class="btn btn-danger btn-sm mx-1">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>Angus Grady</td>
-                    <td>HR</td>
-                    <td>34</td>
-                    <td>2012-06-11</td>
-                    <td class="d-flex justify-content-center">
-                      <button class="btn btn-success btn-sm mx-1">Edit</button>
-                      <button class="btn btn-primary btn-sm mx-1" title="View Employee Information" data-bs-toggle="modal" data-bs-target="#editInfo">View</button>
-                      <button class="btn btn-danger btn-sm mx-1">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Raheem Lehner</td>
-                    <td>Dynamic Division Officer</td>
-                    <td>47</td>
-                    <td>2011-04-19</td>
-                    <td class="d-flex justify-content-center">
-                      <button class="btn btn-success btn-sm mx-1">Edit</button>
-                      <button class="btn btn-primary btn-sm mx-1" title="View Employee Information" data-bs-toggle="modal" data-bs-target="#editInfo">View</button>
-                      <button class="btn btn-danger btn-sm mx-1">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                    <td class="d-flex justify-content-center">
-                      <button class="btn btn-success btn-sm mx-1">Edit</button>
-                      <button class="btn btn-primary btn-sm mx-1" title="View Employee Information" data-bs-toggle="modal" data-bs-target="#editInfo">View</button>
-                      <button class="btn btn-danger btn-sm mx-1">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Bridie Kessler</td>
-                    <td>Developer</td>
-                    <td>35</td>
-                    <td>2014-12-05</td>
-                    <td class="d-flex justify-content-center">
-                      <button class="btn btn-success btn-sm mx-1">Edit</button>
-                      <button class="btn btn-primary btn-sm mx-1" title="View Employee Information" data-bs-toggle="modal" data-bs-target="#editInfo">View</button>
-                      <button class="btn btn-danger btn-sm mx-1">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Ashleigh Langosh</td>
-                    <td>Finance</td>
-                    <td>45</td>
-                    <td>2011-08-12</td>
-                    <td class="d-flex justify-content-center">
-                      <button class="btn btn-success btn-sm mx-1">Edit</button>
-                      <button class="btn btn-primary btn-sm mx-1" title="View Employee Information" data-bs-toggle="modal" data-bs-target="#editInfo">View</button>
-                      <button class="btn btn-danger btn-sm mx-1">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>Angus Grady</td>
-                    <td>HR</td>
-                    <td>34</td>
-                    <td>2012-06-11</td>
-                    <td class="d-flex justify-content-center">
-                      <button class="btn btn-success btn-sm mx-1">Edit</button>
-                      <button class="btn btn-primary btn-sm mx-1" title="View Employee Information" data-bs-toggle="modal" data-bs-target="#editInfo">View</button>
-                      <button class="btn btn-danger btn-sm mx-1">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Raheem Lehner</td>
-                    <td>Dynamic Division Officer</td>
-                    <td>47</td>
-                    <td>2011-04-19</td>
-                    <td class="d-flex justify-content-center">
-                      <button class="btn btn-success btn-sm mx-1">Edit</button>
-                      <button class="btn btn-primary btn-sm mx-1" title="View Employee Information" data-bs-toggle="modal" data-bs-target="#editInfo">View</button>
-                      <button class="btn btn-danger btn-sm mx-1">Delete</button>
-                    </td>
-                  </tr>
-                </tbody>-->
-              </table>
-              <!-- End Default Table Example -->
+
+<!-- End Default Table Example -->
             </div>
             <div class="mx-4">
               <nav aria-label="Page navigation example">
@@ -346,6 +249,7 @@ session_start();
                             <option value="Electronics">Electronics</option>
                             <option value="Hygiene">Hygiene</option>
                             <option value="Home">Home</option>
+                            <option value="food">Food</option>
                         </select>
                     </div>
                     <div class="mb-3">
