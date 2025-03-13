@@ -1,27 +1,42 @@
 <?php
 session_start();
-  include('partials\header.php');
-  include('partials\sidebar.php');
-  include('database\database.php');
-  include('database\create.php');
-  include('database\update.php');
-  include('database\delete.php');
+include('partials\header.php');
+include('partials\sidebar.php');
+include('database\database.php');
+include('database\create.php');
+include('database\update.php');
+include('database\delete.php');
 
-  $sql = "SELECT * FROM tblproduct";
+$status = '';
+if (isset($_SESSION['status'])) {
+    $status = $_SESSION['status'];
+    unset($_SESSION['status']);
+}
+//FOR PAGENATION
+// Set the number of records per page
+$records_per_page = 10;
 
-  $tblproduct = $conn->query($sql);
-  $status = '';
-  if (isset($_SESSION['status'])) {
-      $status = $_SESSION['status'];
-      unset($_SESSION['status']);
-  }
-  
-  // Your PHP BACK CODE HERE
+// Get the current page from the query parameter, default to 1 if not set
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
+// Calculate the offset for the SQL query
+$offset = ($current_page - 1) * $records_per_page;
+
+// Modify the SQL query to fetch only the records for the current page
+$sql = "SELECT * FROM tblproduct LIMIT $records_per_page OFFSET $offset";
+$tblproduct = $conn->query($sql);
+
+// Get the total number of records
+$total_records_sql = "SELECT COUNT(*) AS total FROM tblproduct";
+$total_records_result = $conn->query($total_records_sql);
+$total_records = $total_records_result->fetch_assoc()['total'];
+
+// Calculate the total number of pages
+$total_pages = ceil($total_records / $records_per_page);
 ?>
 
 <main id="main" class="main">
-<!--ALERT-->
+<!-- ALERT -->
 <?php if ($status == "created"): ?>
     <div class="alert alert-success alert-dismissible fade show d-flex align-items-center p-3 shadow-sm rounded" role="alert" style="border-left: 5px solid #28a745;">
     <i class="bi bi-check-circle-fill me-2 text-success fs-4"></i>
@@ -50,68 +65,62 @@ session_start();
     </div>
 
 <?php endif; ?>
+<!-- END ALERT -->
 
-<!--END ALERT-->
-<!--PAGE TITLE-->
-    <div class="pagetitle">
-      <h1>Product Management System</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-          <li class="breadcrumb-item">Tables</li>
-          <li class="breadcrumb-item active">General</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+<!-- PAGE TITLE -->
+<div class="pagetitle">
+  <h1>Product Management System</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+      <li class="breadcrumb-item">Tables</li>
+      <li class="breadcrumb-item active">General</li>
+    </ol>
+  </nav>
+</div><!-- End Page Title -->
 
-    <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5 class="card-title">PRODUCTS</h5>
+            </div>
+            <div>
+              <button class="btn btn-primary btn-sm mt-4 mx-3" data-bs-toggle="modal" data-bs-target="#addProduct">Add Product</button>
+            </div>
+          </div>
 
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between">
-                <div>
-                  <h5 class="card-title">PRODUCTS</h5>
-                </div>
-                <div>
-                <button class="btn btn-primary btn-sm mt-4 mx-3" data-bs-toggle="modal" data-bs-target="#addProduct">Add Product</button>
-                </div>
-              </div>
-
-              <!-- Default Table -->
-              <table class="table">
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Product</th>
-            <th scope="col">Category</th>
-            <th scope="col">Price</th>
-            <th scope="col">Stock</th>
-            <th scope="col" class="text-center">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $sql = "SELECT * FROM tblproduct";
-        $tblproduct = $conn->query($sql);
-
-        if ($tblproduct->num_rows > 0):
-            while ($row = $tblproduct->fetch_assoc()):
-        ?>
-        <tr>
-            <th scope="row"><?php echo $row['id']; ?></th>
-            <td><?php echo $row['product_name']; ?></td>
-            <td><?php echo $row['category']; ?></td>
-            <td><?php echo $row['price']; ?></td>
-            <td><?php echo $row['stock_quantity']; ?></td>
-            <td class="d-flex justify-content-center">
-                <!-- Edit Button -->
-                <button class="btn btn-success btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#editInfo<?php echo $row['id']; ?>">Update</button>
+          <!-- Default Table -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Product</th>
+                <th scope="col">Category</th>
+                <th scope="col">Price</th>
+                <th scope="col">Stock</th>
+                <th scope="col" class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if ($tblproduct->num_rows > 0): ?>
+                <?php while ($row = $tblproduct->fetch_assoc()): ?>
+                  <tr>
+                    <th scope="row"><?php echo $row['id']; ?></th>
+                    <td><?php echo $row['product_name']; ?></td>
+                    <td><?php echo $row['category']; ?></td>
+                    <td><?php echo $row['price']; ?></td>
+                    <td><?php echo $row['stock_quantity']; ?></td>
+                    <td class="d-flex justify-content-center">
+<!-- Edit Button -->
+<button class="btn btn-success btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#editInfo<?php echo $row['id']; ?>">Update</button>
 
 <!-- Edit Modal -->
 <style>
-    /* Modal Content Styling */
+    /* Modal Background */
     #editInfo<?php echo $row['id']; ?> .modal-content {
         background: #f8f9fa;
         border-radius: 12px;
@@ -160,61 +169,61 @@ session_start();
         background: #0056b3;
     }
 </style>
-
+                      
 <div class="modal fade" id="editInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="editInfoLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title">Edit Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+                <div class="modal-body">
                 <form action="database/update.php" method="POST">
-                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
 
-                    <!-- Product Name -->
-                    <div class="mb-3">
-                        <label class="form-label">Product Name</label>
-                        <input type="text" class="form-control" name="product_name" value="<?php echo $row['product_name']; ?>" required>
-                    </div>
+<!-- Product Name -->
+        <div class="mb-3">
+          <label class="form-label">Product Name</label>
+              <input type="text" class="form-control" name="product_name" value="<?php echo $row['product_name']; ?>" required>
+                </div>
 
-                    <!-- Category -->
-                    <div class="mb-3">
-                        <label class="form-label">Category</label>
-                        <select class="form-select" name="category" required>
-                            <option value="Electronics" <?php if ($row['category'] == 'Electronics') echo 'selected'; ?>>Electronics</option>
-                            <option value="Food" <?php if ($row['category'] == 'Food') echo 'selected'; ?>>Food</option>
-                            <option value="Home" <?php if ($row['category'] == 'Home') echo 'selected'; ?>>Home</option>
-                            <option value="Hygiene" <?php if ($row['category'] == 'Hygiene') echo 'selected'; ?>>Hygiene</option>
-                        </select>
-                    </div>
+<!-- Category -->
+  <div class="mb-3">
+    <label class="form-label">Category</label>
+      <select class="form-select" name="category" required>
+          <option value="Electronics" <?php if ($row['category'] == 'Electronics') echo 'selected'; ?>>Electronics</option>
+          <option value="Food" <?php if ($row['category'] == 'Food') echo 'selected'; ?>>Food</option>
+          <option value="Home" <?php if ($row['category'] == 'Home') echo 'selected'; ?>>Home</option>
+          <option value="Hygiene" <?php if ($row['category'] == 'Hygiene') echo 'selected'; ?>>Hygiene</option>
+      </select>
+  </div>
 
-                    <!-- Price -->
-                    <div class="mb-3">
-                        <label class="form-label">Price</label>
-                        <input type="number" class="form-control" name="price" value="<?php echo $row['price']; ?>" required>
-                    </div>
-
-                    <!-- Stock Quantity -->
-                    <div class="mb-3">
-                        <label class="form-label">Stock Quantity</label>
-                        <input type="number" class="form-control" name="stock_quantity" value="<?php echo $row['stock_quantity']; ?>" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Update Product</button>
-                </form>
-            </div>
-        </div>
+<!-- Price -->
+    <div class="mb-3">
+        <label class="form-label">Price</label>
+        <input type="number" class="form-control" name="price" value="<?php echo $row['price']; ?>" required>
     </div>
-</div>
 
+<!-- Stock Quantity -->
+     <div class="mb-3">
+      <label class="form-label">Stock Quantity</label>
+      <input type="number" class="form-control" name="stock_quantity" value="<?php echo $row['stock_quantity']; ?>" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Update Product</button>
+      </form>
+      </div>
+      </div>
+      </div>
+      </div>
 
 
 <!-- View Button -->
-    <button class="btn btn-primary btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#viewInfo<?php echo $row['id']; ?>">View</button>
+<button class="btn btn-primary btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#viewInfo<?php echo $row['id']; ?>">View</button>
 
-<!-- View Modal -->
-<style>
+  <!-- View Modal -->
+  <style>
     /* Modal Background */
     #viewInfo<?php echo $row['id']; ?> .modal-content {
         background: #f8f9fa;
@@ -224,7 +233,7 @@ session_start();
 
     /* Header Styling */
     #viewInfo<?php echo $row['id']; ?> .modal-header {
-        background-color:rgb(72, 132, 143);
+        background-color: #28a745;
         color: white;
         border-top-left-radius: 12px;
         border-top-right-radius: 12px;
@@ -255,25 +264,25 @@ session_start();
     }
 </style>
 
-    <div class="modal fade" id="viewInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="viewInfoLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Product Details</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Name:</strong> <?php echo $row['product_name']; ?></p>
-                    <p><strong>Category:</strong> <?php echo $row['category']; ?></p>
-                    <p><strong>Price:</strong> <?php echo $row['price']; ?></p>
-                    <p><strong>Stock:</strong> <?php echo $row['stock_quantity']; ?></p>
-                </div>
-            </div>
+<div class="modal fade" id="viewInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="viewInfoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Product Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+            <p><strong>Name:</strong> <?php echo $row['product_name']; ?></p>
+            <p><strong>Category:</strong> <?php echo $row['category']; ?></p>
+            <p><strong>Price:</strong> <?php echo $row['price']; ?></p>
+            <p><strong>Stock:</strong> <?php echo $row['stock_quantity']; ?></p>
+        </div>
+      </div>
     </div>
+</div>
 
 <!-- Delete Button -->
-    <button class="btn btn-danger btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#deleteInfo<?php echo $row['id']; ?>">Delete</button>
+<button class="btn btn-danger btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#deleteInfo<?php echo $row['id']; ?>">Delete</button>
 
 <!-- Delete Modal -->
 <style>
@@ -340,54 +349,32 @@ session_start();
     }
 </style>
 
-    <div class="modal fade" id="deleteInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="deleteInfoLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirm Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                     <div class="modal-body">Are you sure you want to delete <strong><?php echo $row['product_name']; ?></strong>?
-                </div>
-                    <div class="modal-footer">
-                        <form action="database/delete.php" method="GET">
-                            <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                            <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                        </form>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
+  <div class="modal fade" id="deleteInfo<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="deleteInfoLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-
-        </td>
-        </tr>
-<?php endwhile; endif; ?>
-</tbody>
-</table>
-
-<!-- End OF Table Modal and alert -->
- 
-            </div>
-            <div class="mx-4">
-              <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-
-        </div>
-
-        
+          <div class="modal-body">Are you sure you want to delete <strong><?php echo $row['product_name']; ?></strong>?</div>
+      <div class="modal-footer">
+          <form action="database/delete.php" method="GET">
+          <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+          <button type="submit" class="btn btn-danger">Yes, Delete</button>
+          </form>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
       </div>
+    </div>
+  </div>
+  </div>
+  </td>
+  </tr>
+  <?php endwhile; ?>
+  <?php endif; ?>
+  </tbody>
+  </table>
 
-<!-- Modal -->
+<!-- ADDING PRODUCT Modal  -->
 <style>
     /* Modal Background */
     #addProduct .modal-content {
@@ -440,51 +427,79 @@ session_start();
     }
 </style>
 
-    <div class="modal fade" id="addProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="addProductLabel">Add New Product</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="productForm" action="database/create.php" method="POST">
-                    <div class="mb-3">
-                        <label for="product_name" class="form-label">Product Name</label>
-                        <input type="text" class="form-control" id="product_name" name="product_name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="price" class="form-label">Price</label>
-                        <input type="number" class="form-control" id="price" name="price" step="0.01" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="category" class="form-label">Category</label>
-                        <select class="form-select" id="category" name="category" required>
-                            <option selected disabled>Select category</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Hygiene">Hygiene</option>
-                            <option value="Home">Home</option>
-                            <option value="food">Food</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="stock_quantity" class="form-label">Stock Quantity</label>
-                        <input type="number" class="form-control" id="stock_quantity" name="stock_quantity" required>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add Product</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+<div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addProductLabel">Add Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="database/create.php" method="POST">
+          <!-- Product Name -->
+          <div class="mb-3">
+            <label class="form-label">Product Name</label>
+            <input type="text" class="form-control" name="product_name" required>
+          </div>
+
+          <!-- Category -->
+          <div class="mb-3">
+            <label class="form-label">Category</label>
+            <select class="form-select" name="category" required>
+              <option value="Electronics">Electronics</option>
+              <option value="Food">Food</option>
+              <option value="Home">Home</option>
+              <option value="Hygiene">Hygiene</option>
+            </select>
+          </div>
+
+          <!-- Price -->
+          <div class="mb-3">
+            <label class="form-label">Price</label>
+            <input type="number" class="form-control" name="price" required>
+          </div>
+
+          <!-- Stock Quantity -->
+          <div class="mb-3">
+            <label class="form-label">Stock Quantity</label>
+            <input type="number" class="form-control" name="stock_quantity" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Add Product</button>
+          
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
+          <!-- End OF Table Modal and alert -->
 
-    </section>
+          <!-- Pagination -->
+          <div class="mx-4">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                <li class="page-item <?php if ($current_page <= 1) echo 'disabled'; ?>">
+                  <a class="page-link" href="?page=<?php echo $current_page - 1; ?>">Previous</a>
+                </li>
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                  <li class="page-item <?php if ($i == $current_page) echo 'active'; ?>">
+                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                  </li>
+                <?php endfor; ?>
+                <li class="page-item <?php if ($current_page >= $total_pages) echo 'disabled'; ?>">
+                  <a class="page-link" href="?page=<?php echo $current_page + 1; ?>">Next</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main><!-- End #main -->
 
-  </main><!-- End #main -->
 <?php
 include('partials\footer.php');
 ?>
