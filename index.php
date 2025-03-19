@@ -12,11 +12,12 @@ if (isset($_SESSION['status'])) {
     $status = $_SESSION['status'];
     unset($_SESSION['status']);
 }
-//FOR PAGENATION
+//FOR PAGENATION\
 // Set the number of records per page
 $records_per_page = 10;
 
 // Get the current page from the query parameter, default to 1 if not set
+
 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
 // Calculate the offset for the SQL query
@@ -89,8 +90,11 @@ $total_pages = ceil($total_records / $records_per_page);
               <h5 class="card-title">PRODUCTS</h5>
             </div>
             <div>
-              <button class="btn btn-primary btn-sm mt-4 mx-3" data-bs-toggle="modal" data-bs-target="#addProduct">Add Product</button>
-            </div>
+  <button class="btn btn-primary btn-sm mt-4 mx-3" data-bs-toggle="modal" data-bs-target="#addProduct">
+    Add Product
+  </button>
+</div>
+
           </div>
 
           <!-- Default Table -->
@@ -104,6 +108,7 @@ $total_pages = ceil($total_records / $records_per_page);
                 <th scope="col">Stock</th>
                 <th scope="col" class="text-center">Action</th>
               </tr>
+
             </thead>
             <tbody>
               <?php if ($tblproduct->num_rows > 0): ?>
@@ -438,7 +443,8 @@ $total_pages = ceil($total_records / $records_per_page);
         <form action="database/create.php" method="POST">
           <!-- Product Name -->
           <div class="mb-3">
-            <label class="form-label">Product Name</label>
+            <label class="form-lab
+            el">Product Name</label>
             <input type="text" class="form-control" name="product_name" required>
           </div>
 
