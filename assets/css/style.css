@@ -15,7 +15,7 @@
 
 body {
   font-family: "Open Sans", sans-serif;
-  background: #f6f9ff;
+  background: #99f7fa;
   color: #444444;
 }
 
@@ -397,7 +397,7 @@ h6 {
 }
 
 .nav-tabs-bordered .nav-link.active {
-  background-color: #fff;
+  background-color: #0b8eaf;
   color: #4154f1;
   border-bottom: 2px solid #4154f1;
 }
@@ -432,7 +432,7 @@ h6 {
   z-index: 997;
   height: 60px;
   box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
-  background-color: #fff;
+  background-color: #1dafb9;
   padding-left: 20px;
   /* Toggle Sidebar Button */
   /* Search Bar */
@@ -609,7 +609,7 @@ h6 {
 }
 
 .header-nav .messages .message-item:hover {
-  background-color: #f6f9ff;
+  background-color: #bad9f3;
 }
 
 .header-nav .profile {
@@ -1259,12 +1259,93 @@ h6 {
   }
 }
 
-#main {
-  background-color: #487452 !important;
-  color: white !important;
+/* Table Background & Borders */
+.table {
+  background-color: #ffffff; /* White background */
+  border-radius: 10px; /* Rounded corners */
+  overflow: hidden; /* Prevents content overflow */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow effect */
 }
 
-/*ADDING PRODUCT Modal
+/* Table Header Styling */
+.table thead {
+  background-color: #0056b3; /* Deep blue */
+  color: white; /* White text */
+}
+
+/* Table Header Text */
+.table thead th {
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 3px solid #003d80; /* Darker blue border */
+}
+
+/* Table Body Styling */
+.table tbody tr {
+  background-color: #f8f9fa; /* Light gray */
+  transition: 0.3s ease-in-out;
+}
+
+/* Alternate Row Colors */
+.table tbody tr:nth-child(odd) {
+  background-color: #e9ecef; /* Slightly darker gray */
+}
+
+/* Hover Effect */
+.table tbody tr:hover {
+  background-color: #7296ac; /* Light blue hover effect */
+  transition: 0.2s ease-in-out;
+}
+
+/* Table Text Alignment */
+.table tbody td {
+  padding: 10px;
+  text-align: center;
+}
+
+/* Button Container (for Action buttons) */
+.table .d-flex {
+  gap: 5px; /* Adds space between buttons */
+}
+
+/* Button Styling */
+.btn {
+  border-radius: 5px;
+  transition: 0.3s ease-in-out;
+}
+
+/* Success Button */
+.btn-success {
+  background-color: #0a7724;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #0a7724;
+}
+
+/* Primary Button */
+.btn-primary {
+  background-color: #311cac;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #1876e2;
+}
+
+/* Danger Button */
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/*ADDING PRODUCT Modal*/
 
 /* Modal Background */
 #addProduct .modal-content {

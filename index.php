@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('partials\header.php');
-include('partials\sidebar.php');
+
 include('database\database.php');
 include('database\create.php');
 include('database\update.php');
@@ -35,14 +35,18 @@ $total_records = $total_records_result->fetch_assoc()['total'];
 // Calculate the total number of pages
 $total_pages = ceil($total_records / $records_per_page);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Management System</title>
-    <link rel="stylesheet" href="path/to/bootstrap.css"> <!-- Update with actual Bootstrap path -->
-    <link rel="stylesheet" href="path/to/custom.css"> <!-- Add any additional styles -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+
+
+
 </head>
 <body>
 <main id="main" class="main">
@@ -107,28 +111,29 @@ $total_pages = ceil($total_records / $records_per_page);
           </div>
 
 <!-- Default Table -->
-          <table class="table">
-            <thead>
-              <tr>
+        
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Product</th>
                 <th scope="col">Category</th>
                 <th scope="col">Price</th>
                 <th scope="col">Stock</th>
                 <th scope="col" class="text-center">Action</th>
-              </tr>
-
-            </thead>
-            <tbody>
-              <?php if ($tblproduct->num_rows > 0): ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($tblproduct->num_rows > 0): ?>
                 <?php while ($row = $tblproduct->fetch_assoc()): ?>
-                  <tr>
-                    <th scope="row"><?php echo $row['id']; ?></th>
-                    <td><?php echo $row['product_name']; ?></td>
-                    <td><?php echo $row['category']; ?></td>
-                    <td><?php echo $row['price']; ?></td>
-                    <td><?php echo $row['stock_quantity']; ?></td>
-                    <td class="d-flex justify-content-center">
+                    <tr>
+                        <th scope="row"><?php echo $row['id']; ?></th>
+                        <td><?php echo $row['product_name']; ?></td>
+                        <td><?php echo $row['category']; ?></td>
+                        <td><?php echo $row['price']; ?></td>
+                        <td><?php echo $row['stock_quantity']; ?></td>
+                        <td class="d-flex justify-content-center">
 <!-- Edit Button -->
 <button class="btn btn-success btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#editInfo<?php echo $row['id']; ?>">Update</button>
 
@@ -382,12 +387,14 @@ $total_pages = ceil($total_records / $records_per_page);
   </div>
   </div>
   </td>
-  </tr>
-  <?php endwhile; ?>
-  <?php endif; ?>
-  </tbody>
-  </table>
-  
+  </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+
 <div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -462,6 +469,7 @@ $total_pages = ceil($total_records / $records_per_page);
 </section>
 </main><!-- End #main -->
 </body>
+</html>
 <?php
 include('partials\footer.php');
 ?>

@@ -94,11 +94,12 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a>
-            </li>
+  <a class="dropdown-item d-flex align-items-center" href="logout.php">
+    <i class="bi bi-box-arrow-right"></i>
+    <span>Sign Out</span>
+  </a>
+</li>
+
 
           </ul><!-- End Profile Dropdown Items -->
         </li><!-- End Profile Nav -->
