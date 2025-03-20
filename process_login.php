@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($username === $valid_username && $password === $valid_password) {
         $_SESSION['user'] = $username; // Store user session
-        header("Location: dashboard.php"); // Redirect to the dashboard
+        header("Location: index.php"); // Redirect to the dashboard
         exit();
     } else {
         $_SESSION['error'] = "Invalid username or password!";
