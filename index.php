@@ -35,7 +35,16 @@ $total_records = $total_records_result->fetch_assoc()['total'];
 // Calculate the total number of pages
 $total_pages = ceil($total_records / $records_per_page);
 ?>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management System</title>
+    <link rel="stylesheet" href="path/to/bootstrap.css"> <!-- Update with actual Bootstrap path -->
+    <link rel="stylesheet" href="path/to/custom.css"> <!-- Add any additional styles -->
+</head>
+<body>
 <main id="main" class="main">
 <!-- ALERT -->
 <?php if ($status == "created"): ?>
@@ -97,7 +106,7 @@ $total_pages = ceil($total_records / $records_per_page);
 
           </div>
 
-          <!-- Default Table -->
+<!-- Default Table -->
           <table class="table">
             <thead>
               <tr>
@@ -378,60 +387,7 @@ $total_pages = ceil($total_records / $records_per_page);
   <?php endif; ?>
   </tbody>
   </table>
-
-<!-- ADDING PRODUCT Modal  -->
-<style>
-    /* Modal Background */
-    #addProduct .modal-content {
-        background: linear-gradient(135deg, #ffffff, #f8f9fa);
-        border-radius: 12px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Header Styling */
-    #addProduct .modal-header {
-        background-color: #007bff;
-        color: white;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
-    }
-
-    /* Close Button */
-    #addProduct .btn-close {
-        filter: invert(1);
-    }
-
-    /* Form Inputs */
-    #addProduct .form-control, 
-    #addProduct .form-select {
-        border-radius: 8px;
-        border: 1px solid #ced4da;
-        padding: 10px;
-    }
-
-    /* Form Labels */
-    #addProduct .form-label {
-        font-weight: bold;
-        color: #495057;
-    }
-
-    /* Footer Buttons */
-    #addProduct .modal-footer {
-        border-top: none;
-    }
-
-    #addProduct .btn-primary {
-        background-color: #007bff;
-        border-radius: 8px;
-        padding: 8px 16px;
-    }
-
-    #addProduct .btn-secondary {
-        border-radius: 8px;
-        padding: 8px 16px;
-    }
-</style>
-
+  
 <div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -505,7 +461,7 @@ $total_pages = ceil($total_records / $records_per_page);
   </div>
 </section>
 </main><!-- End #main -->
-
+</body>
 <?php
 include('partials\footer.php');
 ?>
