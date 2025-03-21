@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2025 at 04:06 AM
+-- Generation Time: Mar 21, 2025 at 06:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -40,18 +40,16 @@ CREATE TABLE `tblproduct` (
 --
 
 INSERT INTO `tblproduct` (`id`, `product_name`, `category`, `price`, `stock_quantity`) VALUES
-(5, 'Dove', 'Hygiene', 167, 15),
-(7, 'Vaseline', 'Hygiene', 123, 2),
+(5, 'Dove', 'Hygiene', 179, 25),
+(7, 'Vaseline', 'Hygiene', 123, 7),
 (12, 'Energen', 'food', 84, 123),
 (13, 'Milo', 'Food', 100, 120),
 (14, 'Lamp', 'Electronics', 233, 12),
 (15, 'Mug', 'Home', 123, 12),
 (16, 'Sponge', 'Home', 150, 156),
-(17, 'Rebisco', 'Food', 123, 12),
 (18, 'Battery', 'Electronics', 178, 3),
 (20, 'Colgate', 'Hygiene', 120, 52),
-(21, 'Electric Fan', 'Electronics', 790, 6),
-(26, 'Hana', 'Hygiene', 123, 12),
+(26, 'Hana', 'Hygiene', 123, 30),
 (27, 'Silka', 'Hygiene', 130, 12),
 (29, 'Sunsilk', 'Hygiene', 84, 12),
 (31, 'Green Cross', 'Hygiene', 123, 14),
@@ -60,7 +58,22 @@ INSERT INTO `tblproduct` (`id`, `product_name`, `category`, `price`, `stock_quan
 (35, 'Charger', 'Electronics', 245, 33),
 (36, 'Calculator', 'Electronics', 250, 12),
 (37, 'Toothbrush', 'Hygiene', 46, 44),
-(38, 'Umbrella ', 'Home', 246, 30);
+(38, 'Umbrella ', 'Home', 246, 30),
+(42, 'Heater', 'Electronics', 300, 17),
+(45, 'Cologne', 'Hygiene', 56, 7),
+(46, 'Palmolive', 'Hygiene', 99, 17);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -73,6 +86,13 @@ ALTER TABLE `tblproduct`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -80,7 +100,13 @@ ALTER TABLE `tblproduct`
 -- AUTO_INCREMENT for table `tblproduct`
 --
 ALTER TABLE `tblproduct`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
